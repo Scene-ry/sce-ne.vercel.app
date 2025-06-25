@@ -16,13 +16,11 @@ export async function GET(req: NextRequest) {
   });
   const data = await res.json();
   const response = NextResponse.json(data);
-  const cookies = Object.fromEntries(
-    res.headers.getSetCookie()
-      .flatMap((cookie) => cookie.split(';'))
-      .map((cookie) => cookie.trim().split('='))
-  );
-  for (const key in cookies) {
-    response.cookies.set(key, cookies[key]);
-  }
+  res.headers.getSetCookie()
+    .flatMap((cookie) => cookie.split(';'))
+    .forEach((cookie) => {
+      const [key, value] = cookie.trim().split('=');
+      response.headers.append('Set-Cookie', `${key}=${value ?? ''}; Path=/`);
+    });
   return response;
 }

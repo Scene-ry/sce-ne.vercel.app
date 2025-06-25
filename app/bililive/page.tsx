@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { cookies } from 'next/headers';
 import partitionsData from '../../room-partitions.json';
 
 export default function BiliLivePage() {
@@ -11,6 +10,7 @@ export default function BiliLivePage() {
   const [stopLoading, setStopLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
+  const [rtmpInfo, setRtmpInfo] = useState<{ addr: string; code: string } | null>(null);
   // 获取所有分区
   const partitionList: { id: string; name: string }[] = [];
   let defaultPartitionId = '235';
@@ -57,9 +57,15 @@ export default function BiliLivePage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ partitionId: selectedPartition, roomId }),
+        credentials: 'include',
       });
       if (!res.ok) throw new Error('请求失败');
-      // 可根据返回内容做后续处理
+      const result = await res.json();
+      if (result?.data?.rtmp?.addr && result?.data?.rtmp?.code) {
+        setRtmpInfo({ addr: result.data.rtmp.addr, code: result.data.rtmp.code });
+      } else {
+        setRtmpInfo(null);
+      }
     } catch (e: any) {
       setError(e.message || '未知错误');
     } finally {
@@ -77,8 +83,10 @@ export default function BiliLivePage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ roomId }),
+        credentials: 'include',
       });
       if (!res.ok) throw new Error('请求失败');
+      setRtmpInfo(null);
       // 可根据返回内容做后续处理
     } catch (e: any) {
       setError(e.message || '未知错误');
@@ -87,9 +95,40 @@ export default function BiliLivePage() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/bili-proxy/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        credentials: 'include',
+      });
+      // 清空常见B站cookie
+      [
+        'SESSDATA',
+        'bili_jct',
+        'DedeUserID',
+        'DedeUserID__ckMd5',
+        'sid'
+      ].forEach(name => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      });
+      router.push('/bililive/login');
+    } catch {
+      // 可加错误提示
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">BiliLive Dashboard</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">BiliLive Dashboard</h1>
+        <button
+          className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400 text-sm"
+          onClick={handleLogout}
+        >
+          退出登录
+        </button>
+      </div>
       <div className="mb-4">房间号：{roomId === null ? '加载中...' : roomId}</div>
       <div className="mb-4">
         <label className="mr-2 font-semibold">分区：</label>
@@ -121,6 +160,12 @@ export default function BiliLivePage() {
         </button>
       </div>
       {error && <div className="text-red-500 mt-2">{error}</div>}
+      {rtmpInfo && (
+        <div className="mb-4 p-4 bg-gray-100 rounded">
+          <div><span className="font-semibold">推流地址：</span>{rtmpInfo.addr}</div>
+          <div><span className="font-semibold">推流码：</span>{rtmpInfo.code}</div>
+        </div>
+      )}
       {/* Add your BiliLive content here */}
     </div>
   );
