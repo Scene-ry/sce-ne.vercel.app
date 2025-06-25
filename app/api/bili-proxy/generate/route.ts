@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   const res = await fetch('https://passport.bilibili.com/x/passport-login/web/qrcode/generate', {

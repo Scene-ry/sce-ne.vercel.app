@@ -28,7 +28,7 @@ export default function BiliLiveLoginPage() {
       } else {
         setStatus('error');
       }
-    } catch (error) {
+    } catch {
       setStatus('error');
     }
   };

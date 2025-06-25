@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const bili_jct = cookiesArr.find(row => row.startsWith('bili_jct=')) ?? '';
 
   // 获取前端传来的参数
-  let body: any = {};
+  let body: { roomId: string };
   try {
     body = await req.json();
   } catch {

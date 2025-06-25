@@ -13,9 +13,9 @@ export default function BiliLivePage() {
   const [rtmpInfo, setRtmpInfo] = useState<{ addr: string; code: string } | null>(null);
   // 获取所有分区
   const partitionList: { id: string; name: string }[] = [];
-  let defaultPartitionId = '235';
-  partitionsData.data.forEach((cat: any) => {
-    cat.list.forEach((item: any) => {
+  const defaultPartitionId = '235';
+  partitionsData.data.forEach((cat) => {
+    cat.list.forEach((item) => {
       const fullName = `${cat.name} - ${item.name}`;
       partitionList.push({ id: item.id, name: fullName });
     });
@@ -66,7 +66,7 @@ export default function BiliLivePage() {
       } else {
         setRtmpInfo(null);
       }
-    } catch (e: any) {
+    } catch (e: any) {  // eslint-disable-line @typescript-eslint/no-explicit-any
       setError(e.message || '未知错误');
     } finally {
       setLoading(false);
@@ -88,7 +88,7 @@ export default function BiliLivePage() {
       if (!res.ok) throw new Error('请求失败');
       setRtmpInfo(null);
       // 可根据返回内容做后续处理
-    } catch (e: any) {
+    } catch (e: any) {  // eslint-disable-line @typescript-eslint/no-explicit-any
       setError(e.message || '未知错误');
     } finally {
       setStopLoading(false);
