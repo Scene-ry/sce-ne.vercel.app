@@ -13,9 +13,9 @@ export async function POST(req: NextRequest) {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
       'cookie': cookie,
-      'origin': 'https://passport.bilibili.com',
-      'referer': 'https://passport.bilibili.com/',
-      'user-agent': 'Mozilla/5.0',
+      'origin': 'https://www.bilibili.com',
+      'referer': 'https://www.bilibili.com/',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0',
     },
     body: params.toString(),
     credentials: 'include',

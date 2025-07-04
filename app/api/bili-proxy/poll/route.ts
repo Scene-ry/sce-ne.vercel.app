@@ -8,9 +8,9 @@ export async function GET(req: NextRequest) {
   }
   const res = await fetch(`https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=${encodeURIComponent(qrcode_key)}`, {
     headers: {
-      'User-Agent': 'Mozilla/5.0',
-      'Referer': 'https://passport.bilibili.com/',
-      'Origin': 'https://passport.bilibili.com',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0',
+      'Referer': 'https://www.bilibili.com/',
+      'Origin': 'https://www.bilibili.com',
     },
     credentials: 'include',
   });
