@@ -46,6 +46,8 @@ export async function POST(req: NextRequest) {
     area_v2: partitionId,
     csrf_token: bili_jct.split('=')[1],
     csrf: bili_jct.split('=')[1],
+    version: '1.0.0',
+    build: '1234',
   });
   const res = await fetch('https://api.live.bilibili.com/room/v1/Room/startLive', {
     method: 'POST',
