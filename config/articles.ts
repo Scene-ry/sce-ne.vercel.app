@@ -3,6 +3,7 @@ import { article as tailwindCssResponsiveDesign } from './articles/tailwind-css-
 import { article as typescriptBestPractices } from './articles/typescript-best-practices'
 import { article as reactServerComponents } from './articles/react-server-components'
 import { article as webPerformanceOptimization } from './articles/web-performance-optimization'
+import { article as iidxHistoricalCabinets } from './articles/iidx-historical-cabinets'
 
 export interface Article {
   id: string
@@ -22,6 +23,7 @@ export const articles: Article[] = [
   typescriptBestPractices,
   reactServerComponents,
   webPerformanceOptimization,
+  iidxHistoricalCabinets,
 ]
 
 export function getArticleById(id: string): Article | undefined {
@@ -30,7 +32,7 @@ export function getArticleById(id: string): Article | undefined {
 
 export function getAllArticles(): Article[] {
   return articles.sort((a, b) => {
-    const topDiff = (a.top ?? Infinity) - (b.top ?? Infinity)
+    const topDiff = (b.top ?? 0) - (a.top ?? 0)
     if (topDiff !== 0) return topDiff
     return new Date(b.date).getTime() - new Date(a.date).getTime()
   })
@@ -40,7 +42,7 @@ export function getArticlesByCategory(category: string): Article[] {
   return articles
     .filter((article) => article.category === category)
     .sort((a, b) => {
-      const topDiff = (a.top ?? Infinity) - (b.top ?? Infinity)
+      const topDiff = (b.top ?? 0) - (a.top ?? 0)
       if (topDiff !== 0) return topDiff
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
@@ -83,7 +85,7 @@ export function getArticlesBySubCategory(category: string, subCategory: string):
   return articles
     .filter((article) => article.category === category && article.subCategory === subCategory)
     .sort((a, b) => {
-      const topDiff = (a.top ?? Infinity) - (b.top ?? Infinity)
+      const topDiff = (b.top ?? 0) - (a.top ?? 0)
       if (topDiff !== 0) return topDiff
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
