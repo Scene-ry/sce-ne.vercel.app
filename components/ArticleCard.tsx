@@ -33,7 +33,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           </div>
         )}
         <div className="p-6">
-          <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 mb-3">
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm text-gray-600 dark:text-gray-400 mb-3">
             {article.top !== undefined && (
               <span className="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full text-xs font-bold">
                 {t.articles.topIndicator} {article.top}

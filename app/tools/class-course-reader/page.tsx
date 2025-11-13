@@ -186,37 +186,42 @@ export default function ClassCourseReader() {
             {t.toolPages?.classCourseReader?.searchResults || 'Search Results'}
           </h2>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <table>
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {t.toolPages?.classCourseReader?.taskId || 'Task ID'}
-                  </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {'Title'}
-                  </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {'Genre'}
-                  </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {'Artist'}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredBinEntries.map((entry) => (
-                  <tr
-                    key={entry.entryId}
-                    className="border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                  >
-                    <td className="py-3 px-4 text-gray-900 dark:text-white font-medium">{entry.entryId}</td>
-                    <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{decodeHtmlEntity(entry.title)}</td>
-                    <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{entry.genre}</td>
-                    <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{entry.artist}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {/* Horizontal scroll wrapper (for narrow screens) and vertical scroll limiter */}
+            <div className="overflow-x-auto">
+              <div className="max-h-96 overflow-y-auto">
+                <table className="min-w-max md:min-w-0 md:table-fixed md:w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                      <th className="w-32 text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                        {t.toolPages?.classCourseReader?.taskId || 'Task ID'}
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                        {'Title'}
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                        {'Genre'}
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                        {'Artist'}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredBinEntries.map((entry) => (
+                      <tr
+                        key={entry.entryId}
+                        className="border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      >
+                        <td className="w-32 py-3 px-4 text-gray-900 dark:text-white font-medium whitespace-normal break-words">{entry.entryId}</td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{decodeHtmlEntity(entry.title)}</td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{entry.genre}</td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{entry.artist}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -282,7 +287,7 @@ export default function ClassCourseReader() {
                           >
                             {Object.entries(
                               allInfo[task.id.toString()].difficulties[
-                                course.name.substring(0, 2).toLowerCase() as 'sp' | 'dp'
+                              course.name.substring(0, 2).toLowerCase() as 'sp' | 'dp'
                               ]
                             )
                               .filter(([, diffValue]) => (diffValue as number) > 0)
