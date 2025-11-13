@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { getArticleById } from '@/config/articles'
 import MarkdownContent from '@/components/MarkdownContent'
@@ -17,7 +17,13 @@ export default function ArticlePage({ params }: ArticlePageProps) {
   const [articleId, setArticleId] = React.useState<string | null>(null)
   const [article, setArticle] = React.useState<ReturnType<typeof getArticleById> | null>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Set browser tab title on client
+    const title = `${article?.title} - Scene's House`
+    document.title = title
+  }, [article?.title])
+
+  useEffect(() => {
     params.then(({ id }) => {
       setArticleId(id)
       const foundArticle = getArticleById(id)

@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import ArticleCard from '@/components/ArticleCard'
 import { getAllArticles } from '@/config/articles'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -7,6 +9,12 @@ import { useLanguage } from '@/contexts/LanguageContext'
 export default function ArticlesPage() {
   const articles = getAllArticles()
   const { t } = useLanguage()
+
+  useEffect(() => {
+    // Set browser tab title on client
+    const title = `All Articles - Scene's House`
+    document.title = title
+  }, [])
 
   return (
     <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-6xl">

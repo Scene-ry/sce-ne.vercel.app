@@ -68,6 +68,7 @@ export default function BiliLiveLoginPage() {
   };
 
   useEffect(() => {
+    document.title = 'bilibili Login - Scene\'s House';
     fetchQRCode();
   }, []);
 

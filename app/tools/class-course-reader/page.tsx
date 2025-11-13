@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -26,6 +26,10 @@ export default function ClassCourseReader() {
   const [gameVersion, setGameVersion] = useState<number>(0)
   const [coursesInfo, setCoursesInfo] = useState<CourseInfo[]>([])
   const [filteredBinEntries, setFilteredBinEntries] = useState<BinFileItem[]>([])
+
+  useEffect(() => {
+    document.title = 'class_course_data.bin Analyzer - Scene\'s House'
+  }, [])
 
   // Event Handlers
   function processFile(file: File) {

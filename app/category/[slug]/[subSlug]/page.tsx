@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: SubCategoryPageProps): Promis
   const subCategory = slugToTitle(subSlug)
 
   return {
-    title: `${category} - ${subCategory} Articles - Tech Blog`,
+    title: `${category} - ${subCategory} Articles - Scene's House`,
     description: `Browse all ${subCategory} articles in the ${category} category.`,
   }
 }

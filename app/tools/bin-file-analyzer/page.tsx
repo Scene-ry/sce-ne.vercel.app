@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -30,6 +30,10 @@ export default function BinFileAnalyzer() {
   const [gameVersion, setGameVersion] = useState<number>(0)
   const [allocatedEntryCount, setAllocatedEntryCount] = useState<number>(0)
   const [positionAndLengths, setPositionAndLengths] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    document.title = 'music_data.bin Analyzer - Scene\'s House'
+  }, [])
 
   // Derived state
   const isFileUploaded = items.length > 0

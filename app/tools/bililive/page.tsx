@@ -12,6 +12,10 @@ export default function BiliLivePage() {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [rtmpInfo, setRtmpInfo] = useState<{ addr: string; code: string } | null>(null);
   const [copied, setCopied] = useState<{ addr: boolean; code: boolean }>({ addr: false, code: false });
+
+  useEffect(() => {
+    document.title = 'biliLive Console - Scene\'s House';
+  }, []);
   
   // 获取所有分区
   const partitionList: { id: string; name: string; }[] = [];

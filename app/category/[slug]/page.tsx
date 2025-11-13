@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const category = slugToTitle(slug)
 
   return {
-    title: `${category} Articles - Tech Blog`,
+    title: `${category} Articles - Scene's House`,
     description: `Browse all articles in the ${category} category.`,
   }
 }
