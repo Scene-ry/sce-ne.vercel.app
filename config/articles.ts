@@ -4,6 +4,7 @@ import { article as typescriptBestPractices } from './articles/typescript-best-p
 import { article as reactServerComponents } from './articles/react-server-components'
 import { article as webPerformanceOptimization } from './articles/web-performance-optimization'
 import { article as iidxHistoricalCabinets } from './articles/iidx-historical-cabinets'
+import { article as hkTripPlan } from './articles/hk-trip-plan'
 
 export interface Article {
   id: string
@@ -24,6 +25,7 @@ export const articles: Article[] = [
   reactServerComponents,
   webPerformanceOptimization,
   iidxHistoricalCabinets,
+  hkTripPlan,
 ]
 
 export function getArticleById(id: string): Article | undefined {
