@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import QRCode from 'qrcode';
 import partitionsData from './room-partitions.json';
 
 export default function BiliLivePage() {
@@ -12,11 +13,23 @@ export default function BiliLivePage() {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [rtmpInfo, setRtmpInfo] = useState<{ addr: string; code: string } | null>(null);
   const [copied, setCopied] = useState<{ addr: boolean; code: boolean }>({ addr: false, code: false });
+  const [faceQr, setFaceQr] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     document.title = 'biliLive Console - Scene\'s House';
   }, []);
-  
+
+  useEffect(() => {
+    if (faceQr && canvasRef.current) {
+      QRCode.toCanvas(canvasRef.current, faceQr, {
+        width: 200,
+        margin: 2,
+        color: { dark: '#000000', light: '#ffffff' }
+      }).catch(err => console.error('QR render error:', err));
+    }
+  }, [faceQr]);
+
   // 获取所有分区
   const partitionList: { id: string; name: string; }[] = [];
   const defaultPartitionId = '235';
@@ -67,7 +80,12 @@ export default function BiliLivePage() {
       });
       if (!res.ok) throw new Error('请求失败');
       const result = await res.json();
-      if (result?.data?.rtmp?.addr && result?.data?.rtmp?.code) {
+      if (result?.data?.need_face_auth) {
+        const qrUrl = result.data.qr;
+        // 使用qrUrl生成二维码供用户扫码认证
+        setFaceQr(qrUrl);
+        setRtmpInfo(null);
+      } else if (result?.data?.rtmp?.addr && result?.data?.rtmp?.code) {
         setRtmpInfo({ addr: result.data.rtmp.addr, code: result.data.rtmp.code });
       } else {
         setRtmpInfo(null);
@@ -259,6 +277,26 @@ export default function BiliLivePage() {
                 </svg>
                 <span className="text-red-800 dark:text-red-200 font-medium">错误：</span>
                 <span className="ml-2 text-red-700 dark:text-red-300">{error}</span>
+              </div>
+            </div>
+          )}
+
+          {faceQr && (
+            <div className="mb-8 p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <h2 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-4">需要人脸认证</h2>
+              <div className="flex flex-col items-center">
+                <div className="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-800 inline-block mb-4">
+                  <canvas ref={canvasRef} />
+                </div>
+                <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center mb-3">请使用哔哩哔哩 App 扫描上方二维码进行人脸认证。</p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setFaceQr(null)}
+                    className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
+                  >
+                    取消
+                  </button>
+                </div>
               </div>
             </div>
           )}
