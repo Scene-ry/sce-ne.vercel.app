@@ -20,6 +20,7 @@ export const en = {
     binFileAnalyzer: 'music_data.bin Analyzer',
     classCourseReader: 'Class Course Analyzer',
     bililive: 'bilibili Live Assistant',
+    obsConfig: 'OBS Config',
   },
   // Home page
   home: {

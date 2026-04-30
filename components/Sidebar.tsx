@@ -12,7 +12,7 @@ export default function Sidebar() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const pathname = usePathname()
   const categoryHierarchy = getCategoryHierarchy()
-  const { t } = useLanguage()
+  const { locale, t } = useLanguage()
 
   const toggleCategory = (categoryName: string) => {
     setExpandedCategories((prev) => {
@@ -172,6 +172,18 @@ export default function Sidebar() {
                       }`}
                     >
                       <span suppressHydrationWarning>{t.tools.bililive}</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      target={locale === 'en' ? '_self' : '_blank'}
+                      href={locale === 'en'
+                        ? 'https://github.com/Scene-ry/obs-portable-config/archive/refs/heads/master.zip'
+                        : 'https://gitee.com/scenedx/obs-portable-config/repository/archive/master.zip'}
+                      onClick={() => setIsOpen(false)}
+                      className="block px-3 py-2 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      <span suppressHydrationWarning>{t.tools.obsConfig}</span>
                     </Link>
                   </li>
                 </ul>
