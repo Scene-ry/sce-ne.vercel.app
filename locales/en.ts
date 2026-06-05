@@ -21,6 +21,7 @@ export const en = {
     classCourseReader: 'Class Course Analyzer',
     bililive: 'bilibili Live Assistant',
     obsConfig: 'OBS Config',
+    keySync: 'Key Sync',
   },
   // Home page
   home: {

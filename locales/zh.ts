@@ -23,6 +23,7 @@ export const zh: Translations = {
     classCourseReader: '段位解析',
     bililive: 'bilibili 直播助手',
     obsConfig: 'OBS配置',
+    keySync: '密钥同步',
   },
   // Home page
   home: {
