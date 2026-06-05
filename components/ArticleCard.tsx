@@ -42,20 +42,24 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             <span className="px-3 py-1 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-full text-xs font-medium">
               {article.category}
             </span>
-            <svg
-              className="w-4 h-4 text-gray-400"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
-              {article.subCategory}
-            </span>
+            {article.subCategory && (
+              <>
+                <svg
+                  className="w-4 h-4 text-gray-400"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
+                  {article.subCategory}
+                </span>
+              </>
+            )}
             <time dateTime={article.date}>
               {new Date(article.date).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
                 year: 'numeric',

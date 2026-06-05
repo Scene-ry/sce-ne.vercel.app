@@ -5,6 +5,7 @@ import { article as reactServerComponents } from './articles/react-server-compon
 import { article as webPerformanceOptimization } from './articles/web-performance-optimization'
 import { article as iidxHistoricalCabinets } from './articles/iidx-historical-cabinets'
 import { article as hkTripPlan } from './articles/hk-trip-plan'
+import { article as gameNoteSpeeds } from './articles/game-note-speeds'
 
 export interface Article {
   id: string
@@ -26,6 +27,7 @@ export const articles: Article[] = [
   webPerformanceOptimization,
   iidxHistoricalCabinets,
   hkTripPlan,
+  gameNoteSpeeds,
 ]
 
 export function getArticleById(id: string): Article | undefined {
