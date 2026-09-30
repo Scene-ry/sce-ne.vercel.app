@@ -22,6 +22,7 @@ export const zh: Translations = {
     binFileAnalyzer: 'music_data.bin 解析',
     classCourseReader: '段位解析',
     bililive: 'bilibili 直播助手',
+    bililiveDesktop: 'bilibili 直播助手（桌面版）',
     obsConfig: 'OBS配置',
     keySync: '密钥同步',
   },

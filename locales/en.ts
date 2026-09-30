@@ -20,6 +20,7 @@ export const en = {
     binFileAnalyzer: 'music_data.bin Analyzer',
     classCourseReader: 'Class Course Analyzer',
     bililive: 'bilibili Live Assistant',
+    bililiveDesktop: 'bilibili Live (Desktop)',
     obsConfig: 'OBS Config',
     keySync: 'Key Sync',
   },

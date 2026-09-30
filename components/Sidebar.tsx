@@ -176,6 +176,15 @@ export default function Sidebar() {
                   </li>
                   <li>
                     <Link
+                      href="/archives/BiliLive-win64.zip"
+                      onClick={() => setIsOpen(false)}
+                      className="block px-3 py-2 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      <span suppressHydrationWarning>{t.tools.bililiveDesktop}</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       target={locale === 'en' ? '_self' : '_blank'}
                       href={locale === 'en'
                         ? 'https://github.com/Scene-ry/obs-portable-config/archive/refs/heads/master.zip'
