@@ -48,7 +48,7 @@ export default function ItemDetailsForm({
 
   if (!selectedItem) {
     return (
-      <p className="text-gray-500 dark:text-gray-400">
+      <p className="text-muted">
         {t.toolPages?.binFileAnalyzer?.selectItem || 'Select an item from the list to view details'}
       </p>
     )
@@ -59,7 +59,7 @@ export default function ItemDetailsForm({
       {/* Title, ASCII Title, Genre Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Title</label>
+          <label className="block text-sm font-medium text-muted mb-1.5">Title</label>
           <input
             type="text"
             value={formData.title || ''}
@@ -68,7 +68,7 @@ export default function ItemDetailsForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">ASCII Title</label>
+          <label className="block text-sm font-medium text-muted mb-1.5">ASCII Title</label>
           <input
             type="text"
             value={formData.asciiTitle || ''}
@@ -77,7 +77,7 @@ export default function ItemDetailsForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Genre</label>
+          <label className="block text-sm font-medium text-muted mb-1.5">Genre</label>
           <input
             type="text"
             value={formData.genre || ''}
@@ -86,7 +86,7 @@ export default function ItemDetailsForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Artist</label>
+          <label className="block text-sm font-medium text-muted mb-1.5">Artist</label>
           <input
             type="text"
             value={formData.artist || ''}
@@ -100,7 +100,7 @@ export default function ItemDetailsForm({
       {isCompact && (
         <div className="grid gap-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">License</label>
+            <label className="block text-sm font-medium text-muted mb-1.5">License</label>
             <input
               type="text"
               value={formData.license || ''}
@@ -115,11 +115,11 @@ export default function ItemDetailsForm({
       <div className="grid md:grid-cols-3 gap-4 items-end">
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Entry ID</label>
+            <label className="block text-sm font-medium text-muted mb-1.5">Entry ID</label>
             <input type="number" value={formData.entryId ?? 0} disabled className={INPUT_CLASSES_DISABLED} />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Version</label>
+            <label className="block text-sm font-medium text-muted mb-1.5">Version</label>
             <input
               type="number"
               value={formData.version ?? 0}
@@ -130,7 +130,7 @@ export default function ItemDetailsForm({
         </div>
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Afp Flag</label>
+            <label className="block text-sm font-medium text-muted mb-1.5">Afp Flag</label>
             <input
               type="number"
               value={formData.afpFlag ?? 0}
@@ -139,7 +139,7 @@ export default function ItemDetailsForm({
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Volume</label>
+            <label className="block text-sm font-medium text-muted mb-1.5">Volume</label>
             <input
               type="number"
               value={formData.volume ?? 0}
@@ -149,7 +149,7 @@ export default function ItemDetailsForm({
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Entry Font</label>
+          <label className="block text-sm font-medium text-muted mb-1.5">Entry Font</label>
           <select
             value={formData.entryFont ?? 0}
             onChange={(e) => onFormChange('entryFont', parseInt(e.target.value || '0'))}
@@ -166,7 +166,7 @@ export default function ItemDetailsForm({
 
       {/* Difficulties & File Identifiers */}
       <div className="grid md:grid-cols-2 gap-2">
-        <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+        <div className="bg-surface-hover p-4 rounded-lg">
           <h3 className="font-semibold mb-2">Difficulties (SP / DP)</h3>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -266,7 +266,7 @@ export default function ItemDetailsForm({
           </div>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+        <div className="bg-surface-hover p-4 rounded-lg">
           <h3 className="font-semibold mb-2">File Identifiers</h3>
           <div className="grid grid-cols-1 gap-2">
             <div className="grid grid-cols-2 gap-2">
@@ -421,13 +421,13 @@ export default function ItemDetailsForm({
             <input
               value={formData.bgaFileName || ''}
               onChange={(e) => onFormChange('bgaFileName', e.target.value)}
-              className="w-1/2 p-2 rounded border border-gray-300 dark:border-gray-600"
+              className="w-1/2 p-2.5 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-colors"
             />
             <input
               type="number"
               value={formData.bgaDelay ?? 0}
               onChange={(e) => onFormChange('bgaDelay', parseInt(e.target.value || '0'))}
-              className="w-1/2 p-2 rounded border border-gray-300 dark:border-gray-600"
+              className="w-1/2 p-2.5 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-colors"
             />
           </div>
         </div>
@@ -493,7 +493,7 @@ export default function ItemDetailsForm({
       </div>
 
       {/* Submit Button */}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="pt-4 border-t border-border">
         <button onClick={onSubmitUpdate} className={`w-full md:w-auto ${BUTTON_GREEN}`}>
           {t.toolPages?.binFileAnalyzer?.updateItem || 'Update Item'}
         </button>

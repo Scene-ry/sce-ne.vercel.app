@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-// import { QRCodeSVG } from 'qrcode.react';
 import {
   generateSessionCode,
   encryptSecret,
@@ -20,7 +19,6 @@ export default function SyncPanel() {
   const [secondsLeft, setSecondsLeft] = useState(EXPIRY_SECONDS);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  // const [qrUrl, setQrUrl] = useState('');
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -69,7 +67,6 @@ export default function SyncPanel() {
       }
 
       setSessionCode(code);
-      // setQrUrl(`${window.location.origin}/?code=${code}`);
       setStatus('synced');
       startTimer();
     } catch (err) {
@@ -96,25 +93,24 @@ export default function SyncPanel() {
   const minutes = Math.floor(secondsLeft / 60);
   const secs = secondsLeft % 60;
   const expiryDisplay = `${minutes}:${secs.toString().padStart(2, '0')}`;
-  const expiryColor = secondsLeft < 60 ? 'text-red-400' : 'text-yellow-400';
+  const expiryColor = secondsLeft < 60 ? 'text-red-400' : 'text-amber-400';
 
-  // ── Synced state ──────────────────────────────────────────────────────────
+  // ── Synced state ──
   if (status === 'synced') {
     return (
       <div className="space-y-5">
         <div className="text-center">
-          <div className="text-green-400 text-lg font-semibold">Key synced!</div>
-          <div className="text-slate-400 text-sm mt-0.5">
+          <div className="text-emerald-500 text-base font-semibold">Key synced!</div>
+          <div className="text-muted text-sm mt-0.5">
             Share the code below with the receiving device
           </div>
         </div>
 
-        {/* Session code card */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-5 text-center space-y-3">
-          <div className="font-mono text-3xl font-bold tracking-widest text-gray-900 dark:text-white select-all">
+        <div className="bg-surface-hover rounded-xl p-5 text-center space-y-3">
+          <div className="font-mono text-3xl font-bold tracking-widest text-foreground select-all">
             {formatCode(sessionCode)}
           </div>
-          <div className="text-gray-600 dark:text-slate-400 text-sm">
+          <div className="text-muted text-sm">
             Expires in{' '}
             <span className={`font-mono font-bold ${expiryColor}`}>
               {expiryDisplay}
@@ -122,24 +118,13 @@ export default function SyncPanel() {
           </div>
           <button
             onClick={handleCopyCode}
-            className="w-full py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors"
+            className="w-full py-2 rounded-lg bg-surface hover:bg-border border border-border text-sm font-medium text-foreground transition-colors"
           >
             {copied ? '✓ Copied!' : 'Copy Code'}
           </button>
         </div>
 
-        {/* QR code */}
-        {/* <div className="flex flex-col items-center gap-2">
-          <p className="text-slate-400 text-xs">
-            Or scan this QR code on the other device to auto-fill the code
-          </p>
-          <div className="bg-white p-3 rounded-xl shadow-lg">
-            <QRCodeSVG value={qrUrl} size={160} level="M" />
-          </div>
-        </div> */}
-
-        {/* Info banner */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+        <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-xs text-primary leading-relaxed">
           The receiving device will use this code to retrieve and decrypt your
           key locally. The code is one-time use and the server stores only an
           encrypted blob — it cannot read your key.
@@ -147,7 +132,7 @@ export default function SyncPanel() {
 
         <button
           onClick={handleReset}
-          className="w-full py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm text-slate-400 transition-colors"
+          className="w-full py-2 rounded-lg border border-border hover:bg-surface-hover text-sm text-muted transition-colors"
         >
           Sync Another Key
         </button>
@@ -155,11 +140,11 @@ export default function SyncPanel() {
     );
   }
 
-  // ── Idle / processing / error state ──────────────────────────────────────
+  // ── Idle / processing / error state ──
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-muted mb-1.5">
           Secret Key
         </label>
         <textarea
@@ -170,15 +155,15 @@ export default function SyncPanel() {
           disabled={status === 'processing'}
           autoComplete="off"
           spellCheck={false}
-          className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm font-mono text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-50"
+          className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-sm font-mono text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary resize-none disabled:opacity-50 transition-colors"
         />
-        <div className="mt-1 text-xs text-slate-500 text-right">
+        <div className="mt-1 text-xs text-muted/60 text-right">
           {secret.length} characters
         </div>
       </div>
 
       {status === 'error' && (
-        <div className="bg-red-950/50 border border-red-800/50 rounded-lg p-3 text-sm text-red-300">
+        <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-3 text-sm text-red-400">
           {error}
         </div>
       )}
@@ -186,7 +171,7 @@ export default function SyncPanel() {
       <button
         onClick={handleSync}
         disabled={!secret.trim() || status === 'processing'}
-        className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-xl bg-primary hover:bg-primary-dark disabled:bg-surface-hover disabled:text-muted text-white font-medium text-sm transition-colors flex items-center justify-center gap-2"
       >
         {status === 'processing' ? (
           <>
@@ -198,9 +183,8 @@ export default function SyncPanel() {
         )}
       </button>
 
-      {/* How it works */}
-      <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg p-3 text-xs text-gray-500 dark:text-slate-400 space-y-1">
-        <div className="font-medium text-slate-400 mb-1.5">How it works</div>
+      <div className="bg-surface-hover border border-border rounded-xl p-3 text-xs text-muted space-y-1">
+        <div className="font-medium text-foreground mb-1.5">How it works</div>
         <ul className="space-y-1 list-disc pl-4">
           <li>Your key is encrypted in-browser with AES-256-GCM before upload</li>
           <li>Only a SHA-256 hash of the sync code is sent to the server</li>

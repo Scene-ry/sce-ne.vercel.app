@@ -177,11 +177,11 @@ export default function BinFileAnalyzer() {
   // Render
   if (!isFileUploaded) {
     return (
-      <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-6xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           {t.toolPages?.binFileAnalyzer?.title || 'BIN File Analyzer'}
         </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
+        <p className="text-muted mb-8">
           {t.toolPages?.binFileAnalyzer?.description || 'Upload and analyze binary (.bin) files'}
         </p>
 
@@ -200,19 +200,19 @@ export default function BinFileAnalyzer() {
   }
 
   return (
-    <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-7xl">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">
             {t.toolPages?.binFileAnalyzer?.title || 'BIN File Analyzer'}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-muted">
             {t.toolPages?.binFileAnalyzer?.currentFile || 'Current file'}:{' '}
-            <span className="font-semibold">{fileName}</span> - {'Version'}:{' '}
-            <span className="font-semibold">{gameVersion}</span>
+            <span className="font-semibold text-foreground">{fileName}</span> - {'Version'}:{' '}
+            <span className="font-semibold text-foreground">{gameVersion}</span>
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <FileUploadButton
             onFileSelect={processFile}
             accept=".bin"
@@ -237,12 +237,12 @@ export default function BinFileAnalyzer() {
         className="hidden"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Items List */}
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <div className="rounded-xl border border-border bg-surface p-4">
             <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-base font-semibold text-foreground mb-3">
                 {t.toolPages?.binFileAnalyzer?.itemsList || 'Items List'}
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -251,39 +251,39 @@ export default function BinFileAnalyzer() {
                 </button>
                 <button
                   onClick={() => jsonInputRef.current?.click()}
-                  className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-semibold transition-colors text-sm"
+                  className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors text-sm"
                 >
                   {'Import JSON'}
                 </button>
                 <button
                   onClick={handleExportItemsAsJSON}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors text-sm"
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors text-sm"
                 >
                   {'Export JSON'}
                 </button>
               </div>
             </div>
-            <div className="space-y-2 max-h-[600px] overflow-y-auto">
+            <div className="space-y-1.5 max-h-[600px] overflow-y-auto">
               {items
                 .sort((a, b) => a.entryId - b.entryId)
                 .map((item) => (
                   <div
                     key={item.entryId}
                     onClick={() => handleItemSelect(item)}
-                    className={`group relative w-full text-left p-3 rounded-lg transition-colors ${
+                    className={`group relative w-full text-left p-3 rounded-lg transition-all cursor-pointer ${
                       selectedItem?.entryId === item.entryId
-                        ? 'bg-blue-100 dark:bg-blue-900 border-2 border-blue-500'
-                        : 'bg-gray-50 dark:bg-gray-700 border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600'
+                        ? 'bg-primary/10 border border-primary/40'
+                        : 'bg-surface-hover border border-transparent hover:border-border'
                     }`}
                   >
                     <button onClick={() => handleItemSelect(item)} className="w-full text-left">
-                      <div className="font-semibold text-gray-900 dark:text-white">
+                      <div className="font-semibold text-foreground text-sm">
                         {item.entryId} - {decodeHtmlEntity(item.title)}
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-xs text-muted mt-0.5">
                         {t.toolPages?.binFileAnalyzer?.genre || 'Genre'}: {item.genre}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500">
+                      <div className="text-xs text-muted/70">
                         {t.toolPages?.binFileAnalyzer?.artist || 'Artist'}: {item.artist}
                       </div>
                     </button>
@@ -304,8 +304,8 @@ export default function BinFileAnalyzer() {
 
         {/* Item Details Form */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <h2 className="text-base font-semibold text-foreground mb-4">
               {t.toolPages?.binFileAnalyzer?.itemDetails || 'Item Details'}
             </h2>
 

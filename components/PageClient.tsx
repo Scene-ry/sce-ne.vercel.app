@@ -13,10 +13,8 @@ export default function PageClient() {
   const codeFromUrl = searchParams.get('code') ?? '';
 
   const [activeTab, setActiveTab] = useState<Tab>(codeFromUrl ? 'receive' : 'send');
-  // Capture the code once on mount; stored in state so it's stable across re-renders
   const [prefillCode] = useState(() => normalizeCode(codeFromUrl));
 
-  // Remove the ?code= param from the URL so it doesn't persist on refresh
   useEffect(() => {
     if (codeFromUrl) {
       window.history.replaceState({}, '', window.location.pathname);
@@ -25,48 +23,40 @@ export default function PageClient() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="max-w-lg mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       {/* Header */}
-      <header className="pt-10 pb-4 px-4 text-center select-none">
-        <div className="inline-flex items-center gap-2.5 mb-1">
-          <span className="text-3xl" aria-hidden="true">🔐</span>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">KeySync</h1>
-        </div>
-        <p className="text-gray-600 dark:text-slate-400 text-sm">Secure end-to-end encrypted key transfer</p>
-      </header>
+      <div className="text-center mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">KeySync</h1>
+        <p className="text-sm text-muted mt-1">Secure end-to-end encrypted key transfer</p>
+      </div>
 
-      {/* Main content */}
-      <main className="flex-1 px-4 pb-12">
-        <div className="container mx-auto px-4 md:px-8 py-6 md:py-10 max-w-4xl">
-          {/* Tab bar */}
-          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1 mb-3 border border-gray-200 dark:border-gray-700">
-            <TabButton
-              label="Send Key"
-              active={activeTab === 'send'}
-              onClick={() => setActiveTab('send')}
-            />
-            <TabButton
-              label="Receive Key"
-              active={activeTab === 'receive'}
-              onClick={() => setActiveTab('receive')}
-            />
-          </div>
+      {/* Tab bar */}
+      <div className="flex bg-surface-hover rounded-xl p-1 mb-4 border border-border">
+        <TabButton
+          label="Send Key"
+          active={activeTab === 'send'}
+          onClick={() => setActiveTab('send')}
+        />
+        <TabButton
+          label="Receive Key"
+          active={activeTab === 'receive'}
+          onClick={() => setActiveTab('receive')}
+        />
+      </div>
 
-          {/* Panel card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 shadow-lg">
-            {activeTab === 'send' ? (
-              <SyncPanel />
-            ) : (
-              <RetrievePanel prefillCode={prefillCode} />
-            )}
-          </div>
+      {/* Panel card */}
+      <div className="rounded-xl border border-border bg-surface p-5">
+        {activeTab === 'send' ? (
+          <SyncPanel />
+        ) : (
+          <RetrievePanel prefillCode={prefillCode} />
+        )}
+      </div>
 
-          {/* Footer */}
-          <p className="mt-4 text-center text-xs text-gray-500 dark:text-slate-500">
-            End-to-end encrypted · AES-256-GCM · PBKDF2-SHA256 · Zero-knowledge server · One-time use
-          </p>
-        </div>
-      </main>
+      {/* Footer */}
+      <p className="mt-4 text-center text-[11px] text-muted/60">
+        End-to-end encrypted · AES-256-GCM · PBKDF2-SHA256 · Zero-knowledge server · One-time use
+      </p>
     </div>
   );
 }
@@ -83,10 +73,10 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+      className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-colors ${
         active
-          ? 'bg-blue-600 text-white shadow'
-          : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white'
+          ? 'bg-primary text-white shadow-sm'
+          : 'text-muted hover:text-foreground'
       }`}
     >
       {label}

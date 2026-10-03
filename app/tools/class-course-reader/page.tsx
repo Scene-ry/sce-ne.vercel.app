@@ -9,6 +9,7 @@ import { decodeHtmlEntity } from '../bin-file-analyzer/StringUtil'
 import { downloadFile } from '../shared/fileUtils'
 import { FileUploadButton } from '../shared/FileUpload'
 import { useDragAndDrop } from '../shared/useDragAndDrop'
+import { INPUT_CLASSES, BUTTON_PRIMARY } from '../shared/commonStyles'
 import { Course, CourseInfo, getDanCoursesInfo } from './DanCourse'
 import buildBinFileContent from './DanCourseBuilder'
 import parseBinFile from './DanCourseParser'
@@ -111,21 +112,21 @@ export default function ClassCourseReader() {
   }
 
   return (
-    <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-7xl">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div className="mb-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           {t.toolPages?.classCourseReader?.title || 'Class Course Reader'}
         </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-muted mb-6">
           {t.toolPages?.classCourseReader?.description || 'View and edit class course data from binary files'}
         </p>
 
         {/* File Upload and Search Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div className="rounded-xl border border-border bg-surface p-5 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search Box */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-muted mb-1.5">
                 {t.toolPages?.classCourseReader?.searchLabel || 'Search Courses'}
               </label>
               <input
@@ -135,13 +136,13 @@ export default function ClassCourseReader() {
                   t.toolPages?.classCourseReader?.searchPlaceholder ||
                   'Search by course number, task name, or difficulty...'
                 }
-                className="w-full p-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
+                className={INPUT_CLASSES}
               />
             </div>
 
             {/* File Upload */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-muted mb-1.5">
                 {t.toolPages?.classCourseReader?.uploadLabel || 'Upload .bin File'}
               </label>
               <div className="flex gap-2">
@@ -155,10 +156,7 @@ export default function ClassCourseReader() {
                   inputId="course-file-upload"
                 />
                 {fileName && (
-                  <button
-                    onClick={handleSaveFile}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
-                  >
+                  <button onClick={handleSaveFile} className={BUTTON_PRIMARY}>
                     {t.toolPages?.classCourseReader?.saveFile || 'Save'}
                   </button>
                 )}
@@ -169,7 +167,7 @@ export default function ClassCourseReader() {
 
         {/* Results Count */}
         {courses.length > 0 && (
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-sm text-muted mb-4">
             {'Version'}
             {': '}
             {gameVersion}
@@ -182,26 +180,25 @@ export default function ClassCourseReader() {
 
       {filteredBinEntries.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-lg font-semibold text-foreground mb-3">
             {t.toolPages?.classCourseReader?.searchResults || 'Search Results'}
           </h2>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            {/* Horizontal scroll wrapper (for narrow screens) and vertical scroll limiter */}
+          <div className="rounded-xl border border-border bg-surface p-5">
             <div className="overflow-x-auto">
               <div className="max-h-96 overflow-y-auto">
                 <table className="min-w-max md:min-w-0 md:table-fixed md:w-full">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="w-32 text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                    <tr className="border-b border-border">
+                      <th className="w-32 text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted whitespace-normal break-words">
                         {t.toolPages?.classCourseReader?.taskId || 'Task ID'}
                       </th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted whitespace-normal break-words">
                         {'Title'}
                       </th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted whitespace-normal break-words">
                         {'Genre'}
                       </th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted whitespace-normal break-words">
                         {'Artist'}
                       </th>
                     </tr>
@@ -210,12 +207,12 @@ export default function ClassCourseReader() {
                     {filteredBinEntries.map((entry) => (
                       <tr
                         key={entry.entryId}
-                        className="border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors"
                       >
-                        <td className="w-32 py-3 px-4 text-gray-900 dark:text-white font-medium whitespace-normal break-words">{entry.entryId}</td>
-                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{decodeHtmlEntity(entry.title)}</td>
-                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{entry.genre}</td>
-                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{entry.artist}</td>
+                        <td className="w-32 py-2.5 px-4 text-foreground font-medium text-sm whitespace-normal break-words">{entry.entryId}</td>
+                        <td className="py-2.5 px-4 text-foreground text-sm whitespace-normal break-words">{decodeHtmlEntity(entry.title)}</td>
+                        <td className="py-2.5 px-4 text-muted text-sm whitespace-normal break-words">{entry.genre}</td>
+                        <td className="py-2.5 px-4 text-muted text-sm whitespace-normal break-words">{entry.artist}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -231,26 +228,26 @@ export default function ClassCourseReader() {
         {courses.map((course, courseIndex) => (
           <div
             key={courseIndex}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
+            className="rounded-xl border border-border bg-surface overflow-hidden"
           >
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3">
-              <h3 className="text-lg font-semibold text-white">{course.name}</h3>
+            <div className="bg-gradient-to-r from-primary to-accent px-5 py-3">
+              <h3 className="text-base font-semibold text-white">{course.name}</h3>
             </div>
-            <div className="p-6">
+            <div className="p-5">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <tr className="border-b border-border">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         {t.toolPages?.classCourseReader?.taskNumber || 'Task #'}
                       </th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         {t.toolPages?.classCourseReader?.taskId || 'Task ID'}
                       </th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         {t.toolPages?.classCourseReader?.taskName || 'Task Name'}
                       </th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      <th className="text-left py-2.5 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         {t.toolPages?.classCourseReader?.difficulty || 'Difficulty'}
                       </th>
                     </tr>
@@ -259,21 +256,21 @@ export default function ClassCourseReader() {
                     {course.tasks.map((task, taskIdx) => (
                       <tr
                         key={taskIdx}
-                        className="border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors"
                       >
-                        <td className="py-3 px-4 text-gray-900 dark:text-white font-medium">{taskIdx + 1}</td>
-                        <td className="py-3 px-4">
+                        <td className="py-2.5 px-4 text-foreground font-medium text-sm">{taskIdx + 1}</td>
+                        <td className="py-2.5 px-4">
                           <input
                             type="number"
                             value={task.id}
                             onChange={(e) => handleTaskIdChange(courseIndex, taskIdx, parseInt(e.target.value) || 1)}
-                            className="w-20 p-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-20 p-2 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary text-sm"
                           />
                         </td>
-                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">
+                        <td className="py-2.5 px-4 text-foreground text-sm">
                           {allInfo[task.id.toString()].title}
                         </td>
-                        <td className="py-3 px-4">
+                        <td className="py-2.5 px-4">
                           <select
                             value={task.difficulty}
                             onChange={(e) =>
@@ -283,7 +280,7 @@ export default function ClassCourseReader() {
                                 e.target.value as 'BEGINNER' | 'NORMAL' | 'HYPER' | 'ANOTHER' | 'LEGGENDARIA'
                               )
                             }
-                            className="p-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="p-2 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary text-sm"
                           >
                             {Object.entries(
                               allInfo[task.id.toString()].difficulties[

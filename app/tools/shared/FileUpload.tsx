@@ -3,11 +3,11 @@ import { useDragAndDrop } from './useDragAndDrop'
 
 const UPLOAD_ICON_SVG = (
   <svg
-    className="w-16 h-16 mb-4 transition-colors"
+    className="w-14 h-14 mb-3 transition-colors"
     fill="none"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="2"
+    strokeWidth="1.5"
     viewBox="0 0 24 24"
     stroke="currentColor"
   >
@@ -17,7 +17,7 @@ const UPLOAD_ICON_SVG = (
 
 const UPLOAD_ICON_SVG_SMALL = (
   <svg
-    className="w-5 h-5 mr-2 transition-transform"
+    className="w-4.5 h-4.5 mr-2 transition-transform"
     fill="none"
     strokeLinecap="round"
     strokeLinejoin="round"
@@ -70,10 +70,10 @@ export function FileUploadZone({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border-2 border-dashed p-12 text-center transition-all ${
+      className={`rounded-xl border-2 border-dashed p-10 sm:p-14 text-center transition-all duration-200 ${
         isDragging
-          ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 scale-105'
-          : 'border-gray-300 dark:border-gray-600'
+          ? 'border-primary bg-primary/5 scale-[1.02]'
+          : 'border-border bg-surface hover:border-muted'
       }`}
       {...dragHandlers}
     >
@@ -86,17 +86,17 @@ export function FileUploadZone({
         id="file-upload-zone"
       />
       <label htmlFor="file-upload-zone" className="cursor-pointer inline-flex flex-col items-center">
-        <div className={isDragging ? 'text-blue-500 dark:text-blue-400' : 'text-gray-400'}>
+        <div className={isDragging ? 'text-primary' : 'text-muted'}>
           {UPLOAD_ICON_SVG}
         </div>
         <span
-          className={`text-lg font-semibold mb-2 transition-colors ${
-            isDragging ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'
+          className={`text-base font-semibold mb-1.5 transition-colors ${
+            isDragging ? 'text-primary' : 'text-foreground'
           }`}
         >
           {isDragging ? dropFileHere : uploadPrompt}
         </span>
-        <span className="text-sm text-gray-500 dark:text-gray-400">
+        <span className="text-sm text-muted">
           {isDragging ? releaseToUpload : fileTypeHint}
         </span>
       </label>
@@ -146,10 +146,10 @@ export function FileUploadButton({
       <input ref={fileInputRef} type="file" accept={accept} onChange={handleFileChange} className="hidden" id={inputId} />
       <label
         htmlFor={inputId}
-        className={`flex-1 cursor-pointer inline-flex items-center justify-center p-3 rounded-lg font-semibold transition-all ${
+        className={`flex-1 cursor-pointer inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-sm transition-all ${
           isDragging
-            ? 'bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-400 scale-105'
-            : 'bg-gray-600 hover:bg-gray-700 text-white'
+            ? 'bg-primary text-white border-2 border-primary scale-105'
+            : 'bg-surface-hover text-foreground hover:bg-border border border-border'
         }`}
         {...dragHandlers}
       >

@@ -23,7 +23,6 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState('');
 
-  // Auto-retrieve when a valid code comes in via QR / URL
   useEffect(() => {
     const code = normalizeCode(prefillCode);
     if (code.length === SESSION_CODE_LENGTH) {
@@ -45,7 +44,6 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
     setError('');
 
     try {
-      // Derive retrieval token client-side — server never sees the raw code
       const retrievalToken = await deriveRetrievalToken(sessionCode);
 
       const res = await fetch('/api/key-sync/retrieve', {
@@ -61,7 +59,6 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
 
       const { encryptedPayload } = (await res.json()) as { encryptedPayload: string };
 
-      // Decrypt entirely in-browser
       const plaintext = await decryptSecret(encryptedPayload, sessionCode);
       setDecryptedKey(plaintext);
       setStatus('decrypted');
@@ -90,33 +87,33 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
     setError('');
   }
 
-  // ── Decrypted state ───────────────────────────────────────────────────────
+  // ── Decrypted state ──
   if (status === 'decrypted') {
     return (
       <div className="space-y-5">
         <div className="text-center">
-          <div className="text-green-400 text-lg font-semibold">Key retrieved!</div>
-          <div className="text-slate-400 text-sm mt-0.5">
+          <div className="text-emerald-500 text-base font-semibold">Key retrieved!</div>
+          <div className="text-muted text-sm mt-0.5">
             Decrypted entirely in your browser
           </div>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 space-y-3">
+        <div className="bg-surface-hover rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-muted uppercase tracking-wider">
               Your Secret Key
             </span>
             <button
               onClick={() => setRevealed((r) => !r)}
-              className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-xs text-primary hover:text-primary-dark transition-colors"
             >
               {revealed ? 'Hide' : 'Reveal'}
             </button>
           </div>
 
           <div
-            className={`font-mono text-sm break-all bg-white dark:bg-gray-800 rounded-lg p-3 select-all transition-all duration-150 ${
-              revealed ? 'text-gray-900 dark:text-white' : 'blur-sm select-none pointer-events-none text-gray-900 dark:text-white'
+            className={`font-mono text-sm break-all bg-surface rounded-lg p-3 select-all transition-all duration-150 ${
+              revealed ? 'text-foreground' : 'blur-sm select-none pointer-events-none text-foreground'
             }`}
           >
             {decryptedKey}
@@ -124,20 +121,20 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
 
           <button
             onClick={handleCopy}
-            className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
+            className="w-full py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors"
           >
             {copied ? '✓ Copied to Clipboard' : 'Copy to Clipboard'}
           </button>
         </div>
 
-        <div className="bg-amber-950/40 border border-amber-800/40 rounded-lg p-3 text-xs text-amber-300 leading-relaxed">
+        <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-500 leading-relaxed">
           This key has been permanently deleted from the server. It exists only
           in this window — close or refresh the tab to destroy it.
         </div>
 
         <button
           onClick={handleReset}
-          className="w-full py-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-600 dark:text-gray-300 transition-colors"
+          className="w-full py-2 rounded-lg border border-border hover:bg-surface-hover text-sm text-muted transition-colors"
         >
           Retrieve Another Key
         </button>
@@ -145,13 +142,13 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
     );
   }
 
-  // ── Idle / processing / error state ──────────────────────────────────────
+  // ── Idle / processing / error state ──
   const isComplete = normalizeCode(codeInput).length === SESSION_CODE_LENGTH;
 
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-muted mb-1.5">
           Session Code
         </label>
         <input
@@ -164,12 +161,12 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
           autoCapitalize="characters"
           autoCorrect="off"
           spellCheck={false}
-          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-2xl font-mono font-bold text-center tracking-widest text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase disabled:opacity-50"
+          className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-2xl font-mono font-bold text-center tracking-widest text-foreground placeholder:text-muted/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary uppercase disabled:opacity-50 transition-colors"
         />
       </div>
 
       {status === 'error' && (
-        <div className="bg-red-950/50 border border-red-800/50 rounded-lg p-3 text-sm text-red-300">
+        <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-3 text-sm text-red-400">
           {error}
         </div>
       )}
@@ -177,7 +174,7 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
       <button
         onClick={() => handleRetrieve()}
         disabled={!isComplete || status === 'processing'}
-        className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-xl bg-primary hover:bg-primary-dark disabled:bg-surface-hover disabled:text-muted text-white font-medium text-sm transition-colors flex items-center justify-center gap-2"
       >
         {status === 'processing' ? (
           <>
@@ -189,9 +186,8 @@ export default function RetrievePanel({ prefillCode = '' }: Props) {
         )}
       </button>
 
-      {/* How it works */}
-      <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg p-3 text-xs text-gray-500 dark:text-slate-400 space-y-1">
-        <div className="font-medium text-slate-400 mb-1.5">How it works</div>
+      <div className="bg-surface-hover border border-border rounded-xl p-3 text-xs text-muted space-y-1">
+        <div className="font-medium text-foreground mb-1.5">How it works</div>
         <ul className="space-y-1 list-disc pl-4">
           <li>Enter the 8-character code shown on the sending device</li>
           <li>Your browser hashes the code before sending it to the server</li>

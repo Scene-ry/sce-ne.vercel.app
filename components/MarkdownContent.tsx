@@ -1,93 +1,80 @@
+'use client'
+
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import type { Components } from 'react-markdown'
 import Image from 'next/image'
+import type { Components } from 'react-markdown'
 
-interface MarkdownContentProps {
-  content: string
+function CodeBlock({ className, children }: { className?: string; children: React.ReactNode }) {
+  const language = className?.replace('language-', '') || ''
+  return (
+    <div className="relative group">
+      {language && (
+        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg rounded-tr-[0.7rem] bg-white/10 text-xs text-slate-400 font-mono">
+          {language}
+        </div>
+      )}
+      <pre className="!mt-0">
+        <code className={className}>{children}</code>
+      </pre>
+    </div>
+  )
 }
 
-export default function MarkdownContent({ content }: MarkdownContentProps) {
-  const components: Components = {
-    h1: ({ children }) => (
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 mt-8 first:mt-0">{children}</h1>
-    ),
-    h2: ({ children }) => <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 mt-6">{children}</h2>,
-    h3: ({ children }) => <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 mt-4">{children}</h3>,
-    p: ({ children, node }) => {
-      // Check if this paragraph only contains an image
-      if (
-        node &&
-        node.children &&
-        node.children.length === 1 &&
-        node.children[0].type === 'element' &&
-        node.children[0].tagName === 'img'
-      ) {
+const components: Components = {
+  img: ({ alt, src }) => {
+    if (!src || typeof src !== 'string') return null
+    const srcStr = src as string
+    // Bilibili video embed
+    if (alt === 'bilibili') {
+      return (
+        <div className="relative w-full my-6" style={{ paddingTop: '56.25%' }}>
+          <iframe
+            src={srcStr.startsWith('//') ? `https:${srcStr}` : srcStr}
+            className="absolute inset-0 w-full h-full rounded-xl"
+            allowFullScreen
+            sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"
+          />
+        </div>
+      )
+    }
+    return (
+      <span className="block my-6">
+        <Image
+          src={srcStr}
+          alt={alt || ''}
+          width={800}
+          height={600}
+          className="rounded-xl w-full h-auto"
+          style={{ maxWidth: '100%', height: 'auto' }}
+        />
+      </span>
+    )
+  },
+  p: ({ children, ...props }) => {
+    // If paragraph contains only an image, don't wrap in <p>
+    const childArray = Array.isArray(children) ? children : [children]
+    if (childArray.length === 1 && typeof childArray[0] === 'object' && childArray[0] !== null) {
+      const child = childArray[0] as Record<string, unknown>
+      if (child.type === 'img' || (child.props && (child.props as Record<string, unknown>).src)) {
         return <>{children}</>
       }
+    }
+    return <p {...props}>{children}</p>
+  },
+  code: ({ className, children, ...props }) => {
+    const isBlock = className?.startsWith('language-')
+    if (isBlock) {
+      return <CodeBlock className={className}>{children}</CodeBlock>
+    }
+    return <code {...props}>{children}</code>
+  },
+  pre: ({ children }) => <>{children}</>,
+}
 
-      return <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{children}</p>
-    },
-    ul: ({ children }) => <ul className="list-disc list-inside space-y-2 mb-4 ml-4">{children}</ul>,
-    ol: ({ children }) => <ol className="list-decimal list-inside space-y-2 mb-4 ml-4">{children}</ol>,
-    li: ({ children }) => <li className="text-gray-700 dark:text-gray-300">{children}</li>,
-    img: ({ src, alt }) => {
-      if (!src || typeof src !== 'string') return null
-      if (alt === 'bilibili') {
-        return (
-          <iframe
-            src={src}
-            allowFullScreen={true}
-            className="w-full h-110"
-          />
-        )
-      }
-      return (
-        <div className="my-6 relative w-full overflow-hidden rounded-lg">
-          <Image
-            src={src}
-            alt={alt || ''}
-            width={800}
-            height={600}
-            className="w-full h-auto"
-            sizes="(max-width: 768px) 100vw, 800px"
-          />
-        </div>
-      )
-    },
-    code: ({ className, children }) => {
-      const match = /language-(\w+)/.exec(className || '')
-      const lang = match ? match[1] : ''
-      const inline = !className // If there's no className, it's inline code
-
-      if (inline) {
-        return (
-          <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-blue-600 dark:text-blue-400">
-            {children}
-          </code>
-        )
-      }
-
-      return (
-        <div className="mb-4">
-          <div className="bg-gray-900 rounded-lg overflow-hidden">
-            {lang && (
-              <div className="px-4 py-2 bg-gray-800 text-gray-400 text-xs font-mono border-b border-gray-700">
-                {lang}
-              </div>
-            )}
-            <pre className="p-4 overflow-x-auto">
-              <code className="text-sm text-gray-100 font-mono">{children}</code>
-            </pre>
-          </div>
-        </div>
-      )
-    },
-    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
-  }
-
+export default function MarkdownContent({ content }: { content: string }) {
   return (
-    <div className="prose prose-lg max-w-none">
+    <div className="prose max-w-none">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
         {content}
       </ReactMarkdown>
