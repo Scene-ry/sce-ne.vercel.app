@@ -6,10 +6,23 @@ import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import type { CategoryHierarchy } from '@/lib/articles'
 
-function NavLink({ href, label, icon, active }: { href: string; label: string; icon: React.ReactNode; active: boolean }) {
+function NavLink({
+  href,
+  label,
+  icon,
+  active,
+  onNavigate,
+}: {
+  href: string
+  label: string
+  icon: React.ReactNode
+  active: boolean
+  onNavigate?: () => void
+}) {
   return (
     <Link
       href={href}
+      onClick={onNavigate}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
         active
           ? 'bg-primary/10 text-primary'
@@ -51,10 +64,23 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
   const pathname = usePathname()
   const { t, locale, setLocale } = useLanguage()
 
+  // Close the mobile drawer whenever the route changes (e.g. back/forward navigation)
+  const [prevPathname, setPrevPathname] = useState(pathname)
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname)
+    setMobileOpen(false)
+  }
+
+  const closeMobile = () => setMobileOpen(false)
+
   const toggleCategory = (name: string) => {
     setExpandedCats((prev) => {
       const next = new Set(prev)
-      next.has(name) ? next.delete(name) : next.add(name)
+      if (next.has(name)) {
+        next.delete(name)
+      } else {
+        next.add(name)
+      }
       return next
     })
   }
@@ -67,7 +93,7 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-border">
-        <Link href="/" className="block" onClick={() => setMobileOpen(false)}>
+        <Link href="/" className="block" onClick={closeMobile}>
           <h1 className="text-lg font-bold text-foreground">{t.nav.techBlog}</h1>
           <p className="text-xs text-muted mt-0.5">{t.nav.tagline}</p>
         </Link>
@@ -79,8 +105,8 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
         <div>
           <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted/70">{t.sections.navigation}</p>
           <div className="space-y-0.5">
-            <NavLink href="/" label={t.nav.home} icon={<HomeIcon />} active={pathname === '/'} />
-            <NavLink href="/articles" label={t.nav.allArticles} icon={<ArticlesIcon />} active={pathname === '/articles'} />
+            <NavLink href="/" label={t.nav.home} icon={<HomeIcon />} active={pathname === '/'} onNavigate={closeMobile} />
+            <NavLink href="/articles" label={t.nav.allArticles} icon={<ArticlesIcon />} active={pathname === '/articles'} onNavigate={closeMobile} />
           </div>
         </div>
 
@@ -88,14 +114,15 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
         <div>
           <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted/70">{t.sections.tools}</p>
           <div className="space-y-0.5">
-            <NavLink href="/tools/bin-file-analyzer" label={t.tools.binFileAnalyzer} icon={<ToolIcon />} active={pathname === '/tools/bin-file-analyzer'} />
-            <NavLink href="/tools/class-course-reader" label={t.tools.classCourseReader} icon={<ToolIcon />} active={pathname === '/tools/class-course-reader'} />
-            <NavLink href="/tools/bililive" label={t.tools.bililive} icon={<ToolIcon />} active={pathname.startsWith('/tools/bililive')} />
-            <NavLink href="/tools/key-sync" label={t.tools.keySync} icon={<ToolIcon />} active={pathname === '/tools/key-sync'} />
+            <NavLink href="/tools/bin-file-analyzer" label={t.tools.binFileAnalyzer} icon={<ToolIcon />} active={pathname === '/tools/bin-file-analyzer'} onNavigate={closeMobile} />
+            <NavLink href="/tools/class-course-reader" label={t.tools.classCourseReader} icon={<ToolIcon />} active={pathname === '/tools/class-course-reader'} onNavigate={closeMobile} />
+            <NavLink href="/tools/bililive" label={t.tools.bililive} icon={<ToolIcon />} active={pathname.startsWith('/tools/bililive')} onNavigate={closeMobile} />
+            <NavLink href="/tools/key-sync" label={t.tools.keySync} icon={<ToolIcon />} active={pathname === '/tools/key-sync'} onNavigate={closeMobile} />
             <a
               href="/archives/BiliLive-win64.zip"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={closeMobile}
               className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted hover:bg-surface-hover hover:text-foreground transition-all duration-150"
             >
               <span className="w-5 h-5 flex-shrink-0"><ToolIcon /></span>
@@ -106,6 +133,7 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
               href={obsUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={closeMobile}
               className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted hover:bg-surface-hover hover:text-foreground transition-all duration-150"
             >
               <span className="w-5 h-5 flex-shrink-0"><ToolIcon /></span>
@@ -130,7 +158,7 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
                     <div className="flex items-center">
                       <Link
                         href={`/category/${catSlug}`}
-                        onClick={() => setMobileOpen(false)}
+                        onClick={closeMobile}
                         className={`flex-1 flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
                           isActive ? 'bg-primary/10 text-primary' : 'text-muted hover:bg-surface-hover hover:text-foreground'
                         }`}
@@ -156,7 +184,7 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
                             <Link
                               key={sub}
                               href={`/category/${catSlug}/${subSlug}`}
-                              onClick={() => setMobileOpen(false)}
+                              onClick={closeMobile}
                               className={`block px-3 py-1.5 rounded-md text-sm transition-all duration-150 ${
                                 subActive ? 'text-primary font-medium' : 'text-muted hover:text-foreground'
                               }`}
@@ -193,35 +221,46 @@ export default function Sidebar({ categories }: { categories: CategoryHierarchy[
 
   return (
     <>
-      {/* Mobile hamburger */}
+      {/* Mobile hamburger / close toggle */}
       <button
-        onClick={() => setMobileOpen(true)}
+        onClick={() => setMobileOpen((open) => !open)}
         className="fixed top-3 left-3 z-50 p-2 rounded-lg bg-surface border border-border shadow-md lg:hidden"
-        aria-label="Open menu"
+        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={mobileOpen}
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-foreground">
-          <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
-        </svg>
+        {mobileOpen ? (
+          <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-foreground">
+            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"/>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-foreground">
+            <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+          </svg>
+        )}
       </button>
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setMobileOpen(false)}>
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-          <aside
-            className="sidebar-enter relative w-72 h-full bg-surface border-r border-border shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="absolute top-3 right-3 p-1.5 rounded-lg hover:bg-surface-hover text-muted"
-            >
-              <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"/></svg>
-            </button>
-            {sidebarContent}
-          </aside>
-        </div>
-      )}
+      {/* Mobile overlay — always mounted so open/close both animate */}
+      <div
+        className={`fixed inset-0 z-40 lg:hidden ${mobileOpen ? '' : 'pointer-events-none'}`}
+        inert={!mobileOpen}
+        aria-hidden={!mobileOpen}
+      >
+        {/* Backdrop: tap outside the drawer to close */}
+        <div
+          onClick={closeMobile}
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm cursor-pointer transition-opacity duration-300 ${
+            mobileOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+        {/* Drawer */}
+        <aside
+          className={`relative w-72 max-w-[80vw] h-full pt-14 bg-surface border-r border-border shadow-2xl transition-transform duration-300 ease-out ${
+            mobileOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          {sidebarContent}
+        </aside>
+      </div>
 
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex lg:flex-col lg:w-64 xl:w-72 lg:fixed lg:inset-y-0 lg:left-0 bg-surface border-r border-border">

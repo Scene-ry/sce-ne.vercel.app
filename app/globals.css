@@ -71,11 +71,6 @@ body {
   color: white;
 }
 
-/* Smooth transitions on theme change */
-* {
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
 /* Markdown content styling */
 .prose h1 { font-size: 2rem; font-weight: 700; margin: 2rem 0 1rem; line-height: 1.2; }
 .prose h2 { font-size: 1.5rem; font-weight: 600; margin: 1.75rem 0 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
@@ -123,13 +118,4 @@ body {
   padding: 0.125rem 0.375rem;
   border-radius: 0.25rem;
   font-size: 0.85em;
-}
-
-/* Sidebar animation */
-@keyframes slideIn {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-.sidebar-enter {
-  animation: slideIn 0.25s ease-out;
 }
