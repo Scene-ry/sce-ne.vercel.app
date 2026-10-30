@@ -49,6 +49,18 @@ body {
     'SimSun', 'WenQuanYi Micro Hei', sans-serif;
 }
 
+/* Prevent mobile browsers from auto-zooming the page when a control is focused.
+   iOS Safari / Android Chrome zoom in whenever the focused control's font-size is under 16px,
+   so on small screens every editable control is forced to a minimum of 16px. */
+@media (max-width: 768px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='hidden']),
+  select,
+  textarea,
+  [contenteditable='true'] {
+    font-size: 16px !important;
+  }
+}
+
 /* Smooth scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
